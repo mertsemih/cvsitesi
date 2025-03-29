@@ -96,6 +96,13 @@ export default function Home() {
     }
   };
 
+  const removeSkill = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index)
+    }));
+  };
+
   const addEducation = () => {
     setFormData((prev) => ({
       ...prev,
@@ -314,190 +321,217 @@ export default function Home() {
                   className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{language === "tr" ? "Profil" : "Profile"}</label>
-                <textarea
-                  name="profile"
-                  value={formData.profile}
-                  onChange={handleInputChange}
-                  className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                  rows={4}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{language === "tr" ? "Fotoğraf" : "Photo"}</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoUpload}
-                  className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                />
-              </div>
+            </div>
+
+            {/* Profil */}
+            <div className="mb-4 md:mb-6">
+              <label className="block text-sm font-medium mb-1">{language === "tr" ? "Profil" : "Profile"}</label>
+              <textarea
+                name="profile"
+                value={formData.profile}
+                onChange={handleInputChange}
+                rows={4}
+                className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+              />
             </div>
 
             {/* Yetenekler */}
             <div className="mb-4 md:mb-6">
               <h3 className="text-base md:text-lg font-semibold mb-2">{language === "tr" ? "Yetenekler" : "Skills"}</h3>
-              <div className="flex flex-wrap gap-2">
-                {formData.skills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full text-sm md:text-base ${CV_THEMES[selectedTheme].colors.accent} ${
-                      selectedTheme === 'minimal' ? 'text-white' : 'text-gray-300'
-                    }`}
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
-                  placeholder="Yeni yetenek ekle"
-                  className={`flex-1 p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                  placeholder={language === "tr" ? "Yeni yetenek ekle" : "Add new skill"}
+                  className={`flex-1 p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
                 />
                 <button
                   onClick={handleSkillAdd}
                   className={buttonClasses}
                 >
-                  Ekle
+                  {language === "tr" ? "Ekle" : "Add"}
                 </button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {formData.skills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className={`px-3 py-1 rounded-full flex items-center gap-2 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200'}`}
+                  >
+                    <span>{skill}</span>
+                    <button
+                      onClick={() => removeSkill(index)}
+                      className={deleteButtonClasses}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* Eğitim */}
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">{language === "tr" ? "Eğitim" : "Education"}</h3>
+            <div className="mb-4 md:mb-6">
+              <h3 className="text-base md:text-lg font-semibold mb-2">{language === "tr" ? "Eğitim" : "Education"}</h3>
+              {formData.education.map((edu, index) => (
+                <div key={index} className="mb-4 p-4 border rounded">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-medium">{language === "tr" ? "Eğitim" : "Education"} {index + 1}</h4>
+                    <button
+                      onClick={() => removeEducation(index)}
+                      className={deleteButtonClasses}
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "Okul/Üniversite" : "School/University"}
+                      value={edu.school}
+                      onChange={(e) => updateEducation(index, "school", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "Derece" : "Degree"}
+                      value={edu.degree}
+                      onChange={(e) => updateEducation(index, "degree", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "Yıl" : "Year"}
+                      value={edu.year}
+                      onChange={(e) => updateEducation(index, "year", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                  </div>
+                </div>
+              ))}
               <button
                 onClick={addEducation}
                 className={buttonClasses}
               >
-                Eğitim Ekle
+                {language === "tr" ? "Eğitim Ekle" : "Add Education"}
               </button>
-              {formData.education.map((edu, index) => (
-                <div key={index} className={`mb-4 p-4 border rounded ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                  <input
-                    type="text"
-                    placeholder="Okul/Üniversite"
-                    value={edu.school}
-                    onChange={(e) => updateEducation(index, "school", e.target.value)}
-                    className={`w-full p-2 border rounded mb-2 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Derece"
-                    value={edu.degree}
-                    onChange={(e) => updateEducation(index, "degree", e.target.value)}
-                    className={`w-full p-2 border rounded mb-2 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Yıl"
-                    value={edu.year}
-                    onChange={(e) => updateEducation(index, "year", e.target.value)}
-                    className={`w-full p-2 border rounded mb-2 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                  />
-                  <button
-                    onClick={() => removeEducation(index)}
-                    className={deleteButtonClasses}
-                  >
-                    Sil
-                  </button>
-                </div>
-              ))}
             </div>
 
             {/* Deneyim */}
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">{language === "tr" ? "Deneyim" : "Experience"}</h3>
+            <div className="mb-4 md:mb-6">
+              <h3 className="text-base md:text-lg font-semibold mb-2">{language === "tr" ? "Deneyim" : "Experience"}</h3>
+              {formData.experience.map((exp, index) => (
+                <div key={index} className="mb-4 p-4 border rounded">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-medium">{language === "tr" ? "Deneyim" : "Experience"} {index + 1}</h4>
+                    <button
+                      onClick={() => removeExperience(index)}
+                      className={deleteButtonClasses}
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "Şirket" : "Company"}
+                      value={exp.company}
+                      onChange={(e) => updateExperience(index, "company", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "Pozisyon" : "Position"}
+                      value={exp.position}
+                      onChange={(e) => updateExperience(index, "position", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "Yıl" : "Year"}
+                      value={exp.year}
+                      onChange={(e) => updateExperience(index, "year", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                    <textarea
+                      placeholder={language === "tr" ? "Açıklama" : "Description"}
+                      value={exp.description}
+                      onChange={(e) => updateExperience(index, "description", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                  </div>
+                </div>
+              ))}
               <button
                 onClick={addExperience}
                 className={buttonClasses}
               >
-                Deneyim Ekle
+                {language === "tr" ? "Deneyim Ekle" : "Add Experience"}
               </button>
-              {formData.experience.map((exp, index) => (
-                <div key={index} className={`mb-4 p-4 border rounded ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                  <input
-                    type="text"
-                    placeholder="Şirket"
-                    value={exp.company}
-                    onChange={(e) => updateExperience(index, "company", e.target.value)}
-                    className={`w-full p-2 border rounded mb-2 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Pozisyon"
-                    value={exp.position}
-                    onChange={(e) => updateExperience(index, "position", e.target.value)}
-                    className={`w-full p-2 border rounded mb-2 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                  />
-                  <div className="grid grid-cols-2 gap-2 mb-2">
-                    <input
-                      type="text"
-                      placeholder="Başlangıç Yılı"
-                      value={exp.year}
-                      onChange={(e) => updateExperience(index, "year", e.target.value)}
-                      className={`p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                    />
-                  </div>
-                  <textarea
-                    placeholder="Açıklama"
-                    value={exp.description}
-                    onChange={(e) => updateExperience(index, "description", e.target.value)}
-                    className={`w-full p-2 border rounded mb-2 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                    rows={3}
-                  />
-                  <button
-                    onClick={() => removeExperience(index)}
-                    className={deleteButtonClasses}
-                  >
-                    Sil
-                  </button>
-                </div>
-              ))}
             </div>
 
             {/* Referanslar */}
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">{language === "tr" ? "Referanslar" : "References"}</h3>
+            <div className="mb-4 md:mb-6">
+              <h3 className="text-base md:text-lg font-semibold mb-2">{language === "tr" ? "Referanslar" : "References"}</h3>
+              {formData.references.map((ref, index) => (
+                <div key={index} className="mb-4 p-4 border rounded">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-medium">{language === "tr" ? "Referans" : "Reference"} {index + 1}</h4>
+                    <button
+                      onClick={() => removeReference(index)}
+                      className={deleteButtonClasses}
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "İsim" : "Name"}
+                      value={ref.name}
+                      onChange={(e) => updateReference(index, "name", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "Pozisyon" : "Position"}
+                      value={ref.position}
+                      onChange={(e) => updateReference(index, "position", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                    <input
+                      type="text"
+                      placeholder={language === "tr" ? "İletişim" : "Contact"}
+                      value={ref.contact}
+                      onChange={(e) => updateReference(index, "contact", e.target.value)}
+                      className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                    />
+                  </div>
+                </div>
+              ))}
               <button
                 onClick={addReference}
                 className={buttonClasses}
               >
-                Referans Ekle
+                {language === "tr" ? "Referans Ekle" : "Add Reference"}
               </button>
-              {formData.references.map((ref, index) => (
-                <div key={index} className={`mb-4 p-4 border rounded ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                  <input
-                    type="text"
-                    placeholder="İsim"
-                    value={ref.name}
-                    onChange={(e) => updateReference(index, "name", e.target.value)}
-                    className={`w-full p-2 border rounded mb-2 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="İletişim Bilgisi"
-                    value={ref.contact}
-                    onChange={(e) => updateReference(index, "contact", e.target.value)}
-                    className={`w-full p-2 border rounded mb-2 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                  />
-                  <button
-                    onClick={() => removeReference(index)}
-                    className={deleteButtonClasses}
-                  >
-                    Sil
-                  </button>
-                </div>
-              ))}
+            </div>
+
+            {/* Fotoğraf Yükleme */}
+            <div className="mb-4 md:mb-6">
+              <h3 className="text-base md:text-lg font-semibold mb-2">{language === "tr" ? "Fotoğraf" : "Photo"}</h3>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+              />
             </div>
           </div>
 
           {/* CV Önizleme */}
-          <div className="relative">
+          <div className="relative order-first lg:order-last">
             <div
               ref={cvRef}
               className={`p-4 md:p-8 rounded-lg shadow-md min-h-[297mm] w-[210mm] mx-auto overflow-hidden scale-[0.7] md:scale-100 origin-top-left ${
