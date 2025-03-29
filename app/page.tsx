@@ -545,7 +545,7 @@ export default function Home() {
                 <div className="space-y-4 md:space-y-6">
                   {formData.photo && (
                     <div className="mb-4 md:mb-6">
-                      <Image
+          <Image
                         src={formData.photo}
                         alt="Profil"
                         width={192}
@@ -590,13 +590,13 @@ export default function Home() {
                     </h2>
                     {formData.education.map((edu, index) => (
                       <div key={index} className="mb-4">
-                        <h3 className={`text-base font-medium ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                        <h3 className={`text-base font-medium ${selectedTheme === 'minimal' ? 'text-gray-900' : 'text-gray-300'} break-words`}>
                           {edu.school}
                         </h3>
-                        <p className={`text-sm ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                        <p className={`text-sm ${selectedTheme === 'minimal' ? 'text-gray-700' : 'text-gray-400'} break-words`}>
                           {edu.degree}
                         </p>
-                        <p className={`text-sm ${CV_THEMES[selectedTheme].colors.secondary} text-gray-400`}>
+                        <p className={`text-sm ${selectedTheme === 'minimal' ? 'text-gray-600' : 'text-gray-500'}`}>
                           {edu.year}
                         </p>
                       </div>
@@ -637,17 +637,17 @@ export default function Home() {
                     </h2>
                     {formData.experience.map((exp, index) => (
                       <div key={index} className="mb-6">
-                        <h3 className={`text-lg font-medium ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                        <h3 className={`text-lg font-medium ${selectedTheme === 'minimal' ? 'text-gray-900' : 'text-gray-300'} break-words`}>
                           {exp.company}
                         </h3>
-                        <p className={`text-base ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                        <p className={`text-base ${selectedTheme === 'minimal' ? 'text-gray-700' : 'text-gray-400'} break-words`}>
                           {exp.position}
                         </p>
-                        <p className={`text-sm ${CV_THEMES[selectedTheme].colors.secondary} text-gray-400`}>
+                        <p className={`text-sm ${selectedTheme === 'minimal' ? 'text-gray-600' : 'text-gray-500'}`}>
                           {exp.year}
                         </p>
                         <p className={`whitespace-pre-wrap break-words text-sm md:text-base ${
-                          selectedTheme === 'minimal' ? 'text-gray-700' : 'text-gray-300'
+                          selectedTheme === 'minimal' ? 'text-gray-700' : 'text-gray-400'
                         }`}>
                           {exp.description}
                         </p>
@@ -686,7 +686,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </div>
+    </div>
     </main>
   );
 }
