@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import { toPng } from "html-to-image";
 import { DocumentArrowDownIcon, SunIcon, MoonIcon } from "@heroicons/react/24/outline";
-import html2canvas from 'html2canvas';
 import Image from 'next/image';
 
 // CV tema tipleri
