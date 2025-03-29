@@ -182,7 +182,9 @@ export default function Home() {
           quality: 1.0,
           pixelRatio: 2,
           skipAutoScale: true,
-          backgroundColor: '#ffffff',
+          backgroundColor: selectedTheme === 'minimal' ? '#ffffff' : 
+                          selectedTheme === 'modern' ? '#1e2532' : 
+                          '#2C5530',
           style: {
             transform: 'scale(1)',
             transformOrigin: 'top left'
