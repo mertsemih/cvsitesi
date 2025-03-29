@@ -171,13 +171,23 @@ export default function Home() {
   const downloadAsPNG = async () => {
     if (cvRef.current) {
       try {
-        const dataUrl = await toPng(cvRef.current);
-        const link = document.createElement("a");
-        link.download = "cv.png";
+        const dataUrl = await toPng(cvRef.current, {
+          quality: 1.0,
+          pixelRatio: 2,
+          skipAutoScale: true,
+          backgroundColor: '#ffffff',
+          style: {
+            transform: 'scale(1)',
+            transformOrigin: 'top left'
+          }
+        });
+        
+        const link = document.createElement('a');
+        link.download = 'cv.png';
         link.href = dataUrl;
         link.click();
-      } catch (err) {
-        console.error("PNG oluşturulurken hata oluştu:", err);
+      } catch (error) {
+        console.error('Error generating image:', error);
       }
     }
   };
@@ -564,21 +574,21 @@ export default function Home() {
                 {/* Sağ Kolon */}
                 <div className="space-y-6 overflow-hidden">
                   <div className="mb-8">
-                    <h1 className={`text-4xl font-bold mb-2 break-words ${
+                    <h1 className={`text-3xl md:text-4xl font-bold mb-2 break-words ${
                       selectedTheme === 'minimal' ? 'text-gray-900' : 'text-white'
                     }`}>
                       {formData.fullName}
                     </h1>
-                    <p className={`text-xl ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                    <p className={`text-lg md:text-xl ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
                       {formData.job}
                     </p>
                   </div>
 
                   <div className="overflow-hidden">
-                    <h2 className={`text-2xl font-semibold mb-4 ${CV_THEMES[selectedTheme].colors.secondary}`}>
+                    <h2 className={`text-xl md:text-2xl font-semibold mb-4 ${CV_THEMES[selectedTheme].colors.secondary}`}>
                       {language === "tr" ? "Profil" : "Profile"}
                     </h2>
-                    <p className={`whitespace-pre-wrap break-words overflow-hidden ${
+                    <p className={`whitespace-pre-wrap break-words overflow-hidden text-sm md:text-base ${
                       selectedTheme === 'minimal' ? 'text-gray-700' : 'text-gray-300'
                     }`}>
                       {formData.profile}
@@ -586,22 +596,22 @@ export default function Home() {
                   </div>
 
                   <div className="overflow-hidden">
-                    <h2 className={`text-2xl font-semibold mb-4 ${CV_THEMES[selectedTheme].colors.secondary}`}>
+                    <h2 className={`text-xl md:text-2xl font-semibold mb-4 ${CV_THEMES[selectedTheme].colors.secondary}`}>
                       {language === "tr" ? "Deneyim" : "Experience"}
                     </h2>
                     {formData.experience.map((exp, index) => (
-                      <div key={index} className="mb-4">
+                      <div key={index} className="mb-6">
                         <h3 className={`text-lg font-medium ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
                           {exp.company}
                         </h3>
-                        <p className={`text-${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                        <p className={`text-base ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
                           {exp.position}
                         </p>
-                        <p className={`text-${CV_THEMES[selectedTheme].colors.secondary} text-gray-400`}>
+                        <p className={`text-sm ${CV_THEMES[selectedTheme].colors.secondary} text-gray-400`}>
                           {exp.year}
                         </p>
-                        <p className={`whitespace-pre-wrap break-words ${
-                          selectedTheme === 'minimal' ? 'text-black' : 'text-gray-300'
+                        <p className={`whitespace-pre-wrap break-words text-sm md:text-base ${
+                          selectedTheme === 'minimal' ? 'text-gray-700' : 'text-gray-300'
                         }`}>
                           {exp.description}
                         </p>
@@ -610,15 +620,18 @@ export default function Home() {
                   </div>
 
                   <div className="overflow-hidden">
-                    <h2 className={`text-2xl font-semibold mb-4 ${CV_THEMES[selectedTheme].colors.secondary}`}>
+                    <h2 className={`text-xl md:text-2xl font-semibold mb-4 ${CV_THEMES[selectedTheme].colors.secondary}`}>
                       {language === "tr" ? "Referanslar" : "References"}
                     </h2>
                     {formData.references.map((ref, index) => (
                       <div key={index} className="mb-4">
-                        <h3 className={`text-lg font-medium ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                        <h3 className={`text-base font-medium ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
                           {ref.name}
                         </h3>
-                        <p className={`text-${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                        <p className={`text-sm ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
+                          {ref.position}
+                        </p>
+                        <p className={`text-sm ${CV_THEMES[selectedTheme].colors.secondary} break-words`}>
                           {ref.contact}
                         </p>
                       </div>
@@ -630,14 +643,14 @@ export default function Home() {
 
             <button
               onClick={downloadAsPNG}
-              className="fixed bottom-4 right-4 md:bottom-8 md:right-8 bg-blue-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-full shadow-lg hover:bg-blue-600 flex items-center gap-2 text-sm md:text-base"
+              className="fixed bottom-4 right-4 md:bottom-8 md:right-8 bg-blue-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-full shadow-lg hover:bg-blue-600 flex items-center gap-2 text-sm md:text-base z-50"
             >
               <DocumentArrowDownIcon className="h-5 w-5 md:h-6 md:w-6" />
               <span>{language === "tr" ? "İndir" : "Download"}</span>
             </button>
           </div>
         </div>
-    </div>
+      </div>
     </main>
   );
 }
