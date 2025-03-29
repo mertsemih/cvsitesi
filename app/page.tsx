@@ -187,7 +187,9 @@ export default function Home() {
                           '#2C5530',
           style: {
             transform: 'scale(1)',
-            transformOrigin: 'top left'
+            transformOrigin: 'top left',
+            width: '210mm',
+            height: '297mm'
           }
         });
         
@@ -278,7 +280,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
           {/* Form Bölümü */}
-          <div className={`p-4 md:p-6 rounded-lg shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className={`p-4 md:p-6 rounded-lg shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'} order-2 lg:order-1`}>
             <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">{language === "tr" ? "CV Bilgileri" : "CV Information"}</h2>
             
             {/* Temel Bilgiler */}
@@ -533,10 +535,10 @@ export default function Home() {
           </div>
 
           {/* CV Önizleme */}
-          <div className="relative order-first lg:order-last">
+          <div className="relative order-1 lg:order-2">
             <div
               ref={cvRef}
-              className={`p-4 md:p-8 rounded-lg shadow-md min-h-[297mm] w-[210mm] mx-auto overflow-hidden scale-[0.7] md:scale-100 origin-top-left ${
+              className={`p-4 md:p-8 rounded-lg shadow-md min-h-[297mm] w-[210mm] mx-auto overflow-hidden scale-[0.5] md:scale-100 origin-top-left ${
                 CV_THEMES[selectedTheme].colors.primary
               } ${CV_THEMES[selectedTheme].colors.text}`}
             >
