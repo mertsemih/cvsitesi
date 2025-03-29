@@ -3,6 +3,8 @@
 import { useState, useRef } from "react";
 import { toPng } from "html-to-image";
 import { DocumentArrowDownIcon, SunIcon, MoonIcon } from "@heroicons/react/24/outline";
+import html2canvas from 'html2canvas';
+import Image from 'next/image';
 
 // CV tema tipleri
 type ThemeColors = {
@@ -70,11 +72,11 @@ export default function Home() {
     email: "",
     phone: "",
     profile: "",
-    photo: "",
     skills: [] as string[],
     education: [] as { school: string; degree: string; year: string }[],
-    experience: [] as { company: string; position: string; startYear: string; endYear: string; description: string }[],
-    references: [] as { name: string; contact: string }[],
+    experience: [] as { company: string; position: string; year: string; description: string }[],
+    references: [] as { name: string; position: string; contact: string }[],
+    photo: ""
   });
 
   const [newSkill, setNewSkill] = useState("");
@@ -85,18 +87,14 @@ export default function Home() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const addSkill = () => {
+  const handleSkillAdd = () => {
     if (newSkill.trim()) {
-      setFormData((prev) => ({ ...prev, skills: [...prev.skills, newSkill.trim()] }));
+      setFormData((prev) => ({
+        ...prev,
+        skills: [...prev.skills, newSkill.trim()]
+      }));
       setNewSkill("");
     }
-  };
-
-  const removeSkill = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      skills: prev.skills.filter((_, i) => i !== index),
-    }));
   };
 
   const addEducation = () => {
@@ -127,7 +125,7 @@ export default function Home() {
       ...prev,
       experience: [
         ...prev.experience,
-        { company: "", position: "", startYear: "", endYear: "", description: "" },
+        { company: "", position: "", year: "", description: "" },
       ],
     }));
   };
@@ -151,7 +149,7 @@ export default function Home() {
   const addReference = () => {
     setFormData((prev) => ({
       ...prev,
-      references: [...prev.references, { name: "", contact: "" }],
+      references: [...prev.references, { name: "", position: "", contact: "" }],
     }));
   };
 
@@ -352,7 +350,7 @@ export default function Home() {
                   className={`flex-1 p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
                 />
                 <button
-                  onClick={addSkill}
+                  onClick={handleSkillAdd}
                   className={buttonClasses}
                 >
                   Ekle
@@ -431,15 +429,8 @@ export default function Home() {
                     <input
                       type="text"
                       placeholder="Başlangıç Yılı"
-                      value={exp.startYear}
-                      onChange={(e) => updateExperience(index, "startYear", e.target.value)}
-                      className={`p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Bitiş Yılı"
-                      value={exp.endYear}
-                      onChange={(e) => updateExperience(index, "endYear", e.target.value)}
+                      value={exp.year}
+                      onChange={(e) => updateExperience(index, "year", e.target.value)}
                       className={`p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
                     />
                   </div>
@@ -509,10 +500,13 @@ export default function Home() {
                 <div className="space-y-4 md:space-y-6">
                   {formData.photo && (
                     <div className="mb-4 md:mb-6">
-                      <img
+                      <Image
                         src={formData.photo}
                         alt="Profil"
+                        width={192}
+                        height={192}
                         className={`w-32 h-32 md:w-48 md:h-48 ${selectedTheme === 'minimal' ? 'rounded-lg' : 'rounded-full'} object-cover mx-auto`}
+                        unoptimized
                       />
                     </div>
                   )}
@@ -605,7 +599,7 @@ export default function Home() {
                           {exp.position}
                         </p>
                         <p className={`text-${CV_THEMES[selectedTheme].colors.secondary} text-gray-400`}>
-                          {exp.startYear} - {exp.endYear}
+                          {exp.year}
                         </p>
                         <p className={`whitespace-pre-wrap break-words ${
                           selectedTheme === 'minimal' ? 'text-black' : 'text-gray-300'
